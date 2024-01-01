@@ -1,8 +1,12 @@
+mod asset_loader;
 mod camera;
+mod player;
 
 use bevy::prelude::*;
 
+use asset_loader::AssetLoaderPlugin;
 use camera::CameraPlugin;
+use player::PlayerPlugin;
 
 fn main() {
     App::new()
@@ -12,7 +16,9 @@ fn main() {
             color: Color::default(),
             brightness: 0.75,
         })
+        .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
+        .add_plugins(AssetLoaderPlugin)
         .add_plugins(CameraPlugin)
-        .add_plugins(DefaultPlugins)
+        .add_plugins(PlayerPlugin)
         .run();
 }
