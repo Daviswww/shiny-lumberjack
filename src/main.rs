@@ -1,11 +1,13 @@
 mod asset_loader;
 mod camera;
+mod movement;
 mod player;
 
 use bevy::prelude::*;
 
 use asset_loader::AssetLoaderPlugin;
 use camera::CameraPlugin;
+use movement::MovementPlugin;
 use player::PlayerPlugin;
 
 fn main() {
@@ -19,5 +21,6 @@ fn main() {
         .add_plugins(AssetLoaderPlugin)
         .add_plugins(CameraPlugin)
         .add_plugins(PlayerPlugin)
+        .add_plugins(MovementPlugin)
         .run();
 }
