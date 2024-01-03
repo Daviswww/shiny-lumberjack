@@ -36,34 +36,24 @@ fn spawn_player(mut commands: Commands, image_assets: Res<ImageAssets>) {
     ));
 }
 
-const SPACESHIP_SPEED: f32 = 5.0;
-const SPACESHIP_ROTATION_SPEED: f32 = 2.5;
+const PLAYER_SPEED: f32 = 5.0;
 
 fn player_movement_controls(
-    mut query: Query<(&mut Transform, &mut Velocity), With<Player>>,
+    mut query: Query<&mut Transform, With<Player>>,
     keyboard_input: Res<Input<KeyCode>>,
     time: Res<Time>,
 ) {
-    let (mut transform, mut velocity) = query.single_mut();
-    let mut movement = 0.0;
-    let mut rotation = 0.0;
+    let mut transform = query.single_mut();
 
     if keyboard_input.pressed(KeyCode::D) {
-        rotation = -SPACESHIP_ROTATION_SPEED * time.delta_seconds();
+        transform.translation.x += 100.0 * time.delta_seconds() * PLAYER_SPEED;
     } else if keyboard_input.pressed(KeyCode::A) {
-        rotation = SPACESHIP_ROTATION_SPEED * time.delta_seconds();
+        transform.translation.x -= 100.0 * time.delta_seconds() * PLAYER_SPEED;
     }
 
     if keyboard_input.pressed(KeyCode::S) {
-        movement = -SPACESHIP_SPEED;
-        transform.translation.y -= 100.0 * time.delta_seconds();
+        transform.translation.y -= 100.0 * time.delta_seconds() * PLAYER_SPEED;
     } else if keyboard_input.pressed(KeyCode::W) {
-        movement = SPACESHIP_SPEED;
-        transform.translation.y += 100.0 * time.delta_seconds();
+        transform.translation.y += 100.0 * time.delta_seconds() * PLAYER_SPEED;
     }
-
-    transform.rotate_y(rotation);
-
-    // Update the spaceship's velocity based on new direction.
-    velocity.value = transform.translation * movement;
 }
