@@ -37,23 +37,29 @@ fn spawn_player(mut commands: Commands, image_assets: Res<ImageAssets>) {
 }
 
 const PLAYER_SPEED: f32 = 5.0;
+const BASE_MOVEMENT: f32 = 100.0;
 
 fn player_movement_controls(
     mut query: Query<&mut Transform, With<Player>>,
     keyboard_input: Res<Input<KeyCode>>,
     time: Res<Time>,
 ) {
+    let movement: f32 = BASE_MOVEMENT * time.delta_seconds() * PLAYER_SPEED;
     let mut transform = query.single_mut();
+    let mut movement_x: f32 = 0.0;
+    let mut movement_y: f32 = 0.0;
 
     if keyboard_input.pressed(KeyCode::D) {
-        transform.translation.x += 100.0 * time.delta_seconds() * PLAYER_SPEED;
+        movement_x = movement;
     } else if keyboard_input.pressed(KeyCode::A) {
-        transform.translation.x -= 100.0 * time.delta_seconds() * PLAYER_SPEED;
+        movement_x = -movement;
     }
 
-    if keyboard_input.pressed(KeyCode::S) {
-        transform.translation.y -= 100.0 * time.delta_seconds() * PLAYER_SPEED;
-    } else if keyboard_input.pressed(KeyCode::W) {
-        transform.translation.y += 100.0 * time.delta_seconds() * PLAYER_SPEED;
+    if keyboard_input.pressed(KeyCode::W) {
+        movement_y = movement;
+    } else if keyboard_input.pressed(KeyCode::S) {
+        movement_y = -movement;
     }
+    transform.translation.x += movement_x;
+    transform.translation.y += movement_y;
 }
