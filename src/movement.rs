@@ -26,7 +26,7 @@ impl Acceleration {
 pub struct MovingObjectBundle {
     pub velocity: Velocity,
     pub acceleration: Acceleration,
-    pub model: SpriteBundle,
+    pub model: SpriteSheetBundle,
 }
 
 pub struct MovementPlugin;

@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 
 use crate::{
+    animate::{AnimationIndices, AnimationTimer},
     asset_loader::ImageAssets,
     movement::{Acceleration, MovingObjectBundle, Velocity},
 };
@@ -18,20 +19,32 @@ impl Plugin for PlayerPlugin {
     }
 }
 
-fn spawn_player(mut commands: Commands, image_assets: Res<ImageAssets>) {
+fn spawn_player(
+    mut commands: Commands,
+    image_assets: Res<ImageAssets>,
+    mut texture_atlases: ResMut<Assets<TextureAtlas>>,
+) {
+    let texture_handle = image_assets.player_run.clone();
+    let texture_atlas =
+        TextureAtlas::from_grid(texture_handle, Vec2::new(32.0, 32.0), 4, 1, None, None);
+    let texture_atlas_handle = texture_atlases.add(texture_atlas);
+    let animation_indices = AnimationIndices::new(0, 3);
     commands.spawn((
         MovingObjectBundle {
             velocity: Velocity::new(Vec3::ZERO),
             acceleration: Acceleration::new(Vec3::ZERO),
-            model: SpriteBundle {
-                sprite: Sprite {
+            model: SpriteSheetBundle {
+                sprite: TextureAtlasSprite {
+                    index: animation_indices.first,
                     custom_size: Some(Vec2::new(100.0, 100.0)),
                     ..default()
                 },
-                texture: image_assets.player.clone(),
+                texture_atlas: texture_atlas_handle,
                 ..default()
             },
         },
+        animation_indices,
+        AnimationTimer(Timer::from_seconds(0.1, TimerMode::Repeating)),
         Player,
     ));
 }
