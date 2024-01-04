@@ -51,8 +51,10 @@ fn player_movement_controls(
 
     if keyboard_input.pressed(KeyCode::D) {
         movement_x = movement;
+        transform.rotation.y = 0.0;
     } else if keyboard_input.pressed(KeyCode::A) {
         movement_x = -movement;
+        transform.rotation.y = 1.0;
     }
 
     if keyboard_input.pressed(KeyCode::W) {
@@ -60,6 +62,7 @@ fn player_movement_controls(
     } else if keyboard_input.pressed(KeyCode::S) {
         movement_y = -movement;
     }
+
     transform.translation.x += movement_x;
     transform.translation.y += movement_y;
 }
