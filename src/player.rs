@@ -44,8 +44,8 @@ fn player_movement_controls(
     keyboard_input: Res<Input<KeyCode>>,
     time: Res<Time>,
 ) {
-    let movement: f32 = BASE_MOVEMENT * time.delta_seconds() * PLAYER_SPEED;
     let mut transform = query.single_mut();
+    let movement: f32 = BASE_MOVEMENT * time.delta_seconds() * PLAYER_SPEED;
     let mut movement_x: f32 = 0.0;
     let mut movement_y: f32 = 0.0;
 
