@@ -58,24 +58,22 @@ fn player_movement_controls(
     time: Res<Time>,
 ) {
     let mut transform = query.single_mut();
-    let movement: f32 = BASE_MOVEMENT * time.delta_seconds() * PLAYER_SPEED;
-    let mut movement_x: f32 = 0.0;
-    let mut movement_y: f32 = 0.0;
+    let movement: f32 = BASE_MOVEMENT * time.delta_seconds();
+    let mut new_pos: Vec3 = Vec3::new(0.0, 0.0, 0.0);
 
     if keyboard_input.pressed(KeyCode::D) {
-        movement_x = movement;
+        new_pos.x = PLAYER_SPEED;
         transform.rotation.y = 0.0;
     } else if keyboard_input.pressed(KeyCode::A) {
-        movement_x = -movement;
+        new_pos.x = -PLAYER_SPEED;
         transform.rotation.y = 1.0;
     }
 
     if keyboard_input.pressed(KeyCode::W) {
-        movement_y = movement;
+        new_pos.y = PLAYER_SPEED;
     } else if keyboard_input.pressed(KeyCode::S) {
-        movement_y = -movement;
+        new_pos.y = -PLAYER_SPEED;
     }
 
-    transform.translation.x += movement_x;
-    transform.translation.y += movement_y;
+    transform.translation += movement * new_pos;
 }
