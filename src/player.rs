@@ -6,6 +6,12 @@ use crate::{
     movement::{Acceleration, MovingObjectBundle, Velocity},
 };
 
+// #[derive(Debug, Hash, Clone, Eq, PartialEq, SystemSet)]
+// enum PlayerState {
+//     Idel,
+//     Run,
+// }
+
 #[derive(Component, Debug)]
 pub struct Player;
 
@@ -19,16 +25,23 @@ impl Plugin for PlayerPlugin {
     }
 }
 
+#[derive(Bundle)]
+pub struct PlayerBundle {
+    pub sprite_bundle: MovingObjectBundle,
+    pub player: Player,
+}
+
 fn spawn_player(
     mut commands: Commands,
     image_assets: Res<ImageAssets>,
     mut texture_atlases: ResMut<Assets<TextureAtlas>>,
 ) {
     let texture_handle = image_assets.player_run.clone();
-    let texture_atlas =
-        TextureAtlas::from_grid(texture_handle, Vec2::new(32.0, 32.0), 4, 1, None, None);
+    let sprite_size = Vec2::new(32.0, 32.0);
+    let texture_atlas = TextureAtlas::from_grid(texture_handle, sprite_size, 4, 1, None, None);
     let texture_atlas_handle = texture_atlases.add(texture_atlas);
     let animation_indices = AnimationIndices::new(0, 3);
+
     commands.spawn((
         MovingObjectBundle {
             velocity: Velocity::new(Vec3::ZERO),
