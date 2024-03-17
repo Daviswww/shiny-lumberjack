@@ -6,12 +6,6 @@ use crate::{
     movement::{Acceleration, MovingObjectBundle, Velocity},
 };
 
-// #[derive(Debug, Hash, Clone, Eq, PartialEq, SystemSet)]
-// enum PlayerState {
-//     Idel,
-//     Run,
-// }
-
 #[derive(Component, Debug)]
 pub struct Player;
 
@@ -34,12 +28,12 @@ pub struct PlayerBundle {
 fn spawn_player(
     mut commands: Commands,
     image_assets: Res<ImageAssets>,
-    mut texture_atlases: ResMut<Assets<TextureAtlas>>,
+    mut texture_atlases: ResMut<Assets<TextureAtlasLayout>>,
 ) {
-    let texture_handle = image_assets.player_run.clone();
+    let texture = image_assets.player_run.clone();
     let sprite_size = Vec2::new(32.0, 32.0);
-    let texture_atlas = TextureAtlas::from_grid(texture_handle, sprite_size, 4, 1, None, None);
-    let texture_atlas_handle = texture_atlases.add(texture_atlas);
+    let layout = TextureAtlasLayout::from_grid(sprite_size, 4, 1, None, None);
+    let texture_atlas_layout = texture_atlases.add(layout);
     let animation_indices = AnimationIndices::new(0, 3);
 
     commands.spawn((
@@ -47,12 +41,12 @@ fn spawn_player(
             velocity: Velocity::new(Vec3::ZERO),
             acceleration: Acceleration::new(Vec3::ZERO),
             model: SpriteSheetBundle {
-                sprite: TextureAtlasSprite {
+                texture,
+                atlas: TextureAtlas {
+                    layout: texture_atlas_layout,
                     index: animation_indices.first,
-                    custom_size: Some(Vec2::new(100.0, 100.0)),
-                    ..default()
                 },
-                texture_atlas: texture_atlas_handle,
+                transform: Transform::from_scale(Vec3::splat(6.0)),
                 ..default()
             },
         },
@@ -67,24 +61,24 @@ const BASE_MOVEMENT: f32 = 100.0;
 
 fn player_movement_controls(
     mut query: Query<&mut Transform, With<Player>>,
-    keyboard_input: Res<Input<KeyCode>>,
+    keyboard_input: Res<ButtonInput<KeyCode>>,
     time: Res<Time>,
 ) {
     let mut transform = query.single_mut();
     let movement: f32 = BASE_MOVEMENT * time.delta_seconds();
     let mut new_pos: Vec3 = Vec3::new(0.0, 0.0, 0.0);
 
-    if keyboard_input.pressed(KeyCode::D) {
+    if keyboard_input.pressed(KeyCode::KeyD) {
         new_pos.x = PLAYER_SPEED;
         transform.rotation.y = 0.0;
-    } else if keyboard_input.pressed(KeyCode::A) {
+    } else if keyboard_input.pressed(KeyCode::KeyA) {
         new_pos.x = -PLAYER_SPEED;
         transform.rotation.y = 1.0;
     }
 
-    if keyboard_input.pressed(KeyCode::W) {
+    if keyboard_input.pressed(KeyCode::KeyW) {
         new_pos.y = PLAYER_SPEED;
-    } else if keyboard_input.pressed(KeyCode::S) {
+    } else if keyboard_input.pressed(KeyCode::KeyS) {
         new_pos.y = -PLAYER_SPEED;
     }
 

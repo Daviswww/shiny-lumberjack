@@ -5,14 +5,12 @@ mod asset_loader;
 mod camera;
 mod movement;
 mod player;
-mod state;
 
 use animate::AnimatePlugin;
 use asset_loader::AssetLoaderPlugin;
 use camera::CameraPlugin;
 use movement::MovementPlugin;
 use player::PlayerPlugin;
-use state::StatePlugin;
 
 fn main() {
     App::new()
@@ -27,6 +25,5 @@ fn main() {
         .add_plugins(PlayerPlugin)
         .add_plugins(MovementPlugin)
         .add_plugins(AnimatePlugin)
-        .add_plugins(StatePlugin)
         .run();
 }
