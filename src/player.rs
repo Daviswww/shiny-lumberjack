@@ -33,7 +33,7 @@ fn spawn_player(
     let texture = image_assets.player_run.clone();
     let sprite_size = Vec2::new(32.0, 32.0);
     let layout = TextureAtlasLayout::from_grid(sprite_size, 4, 1, None, None);
-    let texture_atlas_layout = texture_atlases.add(layout);
+    let texture_atlas_layout: Handle<TextureAtlasLayout> = texture_atlases.add(layout);
     let animation_indices = AnimationIndices::new(0, 3);
 
     commands.spawn((

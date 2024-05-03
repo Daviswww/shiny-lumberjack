@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use std::ops::Range;
 
 #[derive(Component, Debug)]
 pub struct AnimationIndices {
@@ -38,4 +39,12 @@ fn animate_sprite(
             };
         }
     }
+}
+
+#[derive(serde::Deserialize, Clone, Debug)]
+#[serde(deny_unknown_fields)]
+pub struct Clip {
+    pub frames: Range<usize>,
+    #[serde(default)]
+    pub repeat: bool,
 }

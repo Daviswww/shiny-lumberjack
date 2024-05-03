@@ -1,0 +1,27 @@
+name: Player
+
+spritesheet:
+  image: [player_32_32.png]
+  tile_size: [32, 32]
+  columns: 1
+  rows: 28
+
+  animation_fps: 0.12
+  animations:
+    fight:
+      frames: [0, 4]
+      repeat: true
+    attacking:
+      frames: [5, 8]
+    jump:
+      frames: [9, 12]
+    squat:
+      frames: [13, 16]
+    run:
+      frames: [17, 20]
+    sleep:
+      frames: [21, 24]
+      repeat: true
+    idel:
+      frames: [25, 28]
+      repeat: true
